@@ -20,18 +20,23 @@ class Length{
     }
 
     public Length(double value, LengthUnit unit){
+        if(unit==null){
+            throw new IllegalArgumentException("Unit must not be null");
+        }
         this.value = value;
         this.unit = unit;
     }
 
     public double convertToBaseUnit(){
-        return this.value*this.unit.getConversionFactor();
+        double inches =  this.value*this.unit.getConversionFactor();
+        return Math.round(inches*100.0)/100.0;
     }
 
     public boolean compare(Length thatLength){
         return Double.compare(this.convertToBaseUnit(),thatLength.convertToBaseUnit())==0;
     }
 
+    @Override
     public boolean equals(Object o){
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -40,19 +45,29 @@ class Length{
         return this.compare(that);
     }
 
+    public Length convertTo(LengthUnit targetUnit) {
+        if (targetUnit == null) {
+            throw new IllegalArgumentException("Target unit must not be null");
+        }
+        double inches = this.convertToBaseUnit();
+        double convertedValue = inches / targetUnit.getConversionFactor();
+        convertedValue = Math.round(convertedValue * 100.0) / 100.0;
+        return new Length(convertedValue, targetUnit);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%.2f %s", value, unit);
+    }
+
     /*
     public static void main(String[] args){
-        Length length1 = new Length(1.0, LengthUnit.FEET);
-        Length length2 = new Length(12.0, LengthUnit.INCHES);
-        System.out.println("Are lengths equal? " + length1.equals(length2));
+        Length length1 = new Length(1.0, LengthUnit.YARDS);
+        Length length2 = new Length(36.0, LengthUnit.INCHES);
+        System.out.println("Are lengths equal? " + length1.equals(length2)); // true
 
-        Length length3 = new Length(1.0, LengthUnit.YARDS);
-        Length length4 = new Length(36.0, LengthUnit.INCHES);
-        System.out.println("Are lengths equal? " + length3.equals(length4));
-
-        Length length5 = new Length(100.0, LengthUnit.CENTIMETERS);
-        Length length6 = new Length(39.3701, LengthUnit.INCHES);
-        System.out.println("Are lengths equal? " + length5.equals(length6));
+        Length converted = length1.convertTo(LengthUnit.FEET);
+        System.out.println("Converted: " + converted);
     }
 
      */
@@ -74,11 +89,21 @@ public class QuantityMeasurementApp {
         return result;
     }
 
+    public static Length demonstrateLengthConversion(double value, Length.LengthUnit fromUnit,
+                                                     Length.LengthUnit toUnit) {
+        Length source = new Length(value, fromUnit);
+        Length converted = source.convertTo(toUnit);
+        System.out.println(source + " converted to " + toUnit + " = " + converted);
+        return converted;
+    }
+
     public static void main(String[] args) {
         demonstrateLengthComparison(1.0, Length.LengthUnit.FEET, 12.0, Length.LengthUnit.INCHES);
         demonstrateLengthComparison(1.0, Length.LengthUnit.YARDS, 36.0, Length.LengthUnit.INCHES);
         demonstrateLengthComparison(100.0, Length.LengthUnit.CENTIMETERS, 39.3701, Length.LengthUnit.INCHES);
-        demonstrateLengthComparison(3.0, Length.LengthUnit.FEET, 1.0, Length.LengthUnit.YARDS);
-        demonstrateLengthComparison(30.48, Length.LengthUnit.CENTIMETERS, 1.0, Length.LengthUnit.FEET);
+
+        demonstrateLengthConversion(3.0, Length.LengthUnit.FEET, Length.LengthUnit.INCHES);
+        demonstrateLengthConversion(2.0, Length.LengthUnit.YARDS, Length.LengthUnit.FEET);
+        demonstrateLengthConversion(30.48, Length.LengthUnit.CENTIMETERS, Length.LengthUnit.FEET);
     }
 }
