@@ -65,4 +65,31 @@ class QuantityMeasurementAppTest {
                 .add(new Length(10.0, Length.LengthUnit.INCHES));
         assertEquals(new Length(125.40, Length.LengthUnit.CENTIMETERS), sum);
     }
+
+    public void testAddFeetAndInchesWithTargetUnitFeet() {
+        Length sum = new Length(1.0, Length.LengthUnit.FEET)
+                .add(new Length(12.0, Length.LengthUnit.INCHES), Length.LengthUnit.FEET);
+        assertEquals(new Length(2.0, Length.LengthUnit.FEET), sum);
+    }
+
+    @Test
+    public void testAddFeetAndInchesWithTargetUnitInches() {
+        Length sum = new Length(1.0, Length.LengthUnit.FEET)
+                .add(new Length(12.0, Length.LengthUnit.INCHES), Length.LengthUnit.INCHES);
+        assertEquals(new Length(24.0, Length.LengthUnit.INCHES), sum);
+    }
+
+    @Test
+    public void testAddYardsAndFeetWithTargetUnitInches() {
+        Length sum = new Length(2.0, Length.LengthUnit.YARDS)
+                .add(new Length(1.0, Length.LengthUnit.FEET), Length.LengthUnit.INCHES);
+        assertEquals(new Length(84.0, Length.LengthUnit.INCHES), sum);
+    }
+
+    @Test
+    public void testAddCentimetersAndInchesWithTargetUnitFeet() {
+        Length sum = new Length(100.0, Length.LengthUnit.CENTIMETERS)
+                .add(new Length(10.0, Length.LengthUnit.INCHES), Length.LengthUnit.FEET);
+        assertEquals(new Length(4.11, Length.LengthUnit.FEET), sum);
+    }
 }

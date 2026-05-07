@@ -67,6 +67,13 @@ class Length{
         return new Length(convertedValue, this.unit);
     }
 
+    public Length add(Length thatLength, LengthUnit targetUnit) {
+        double sumInches = this.convertToBaseUnit() + thatLength.convertToBaseUnit();
+        double convertedValue = sumInches / targetUnit.getConversionFactor();
+        convertedValue = Math.round(convertedValue * 100.0) / 100.0;
+        return new Length(convertedValue, targetUnit);
+    }
+
     /*
     public static void main(String[] args){
         Length length1 = new Length(1.0, LengthUnit.YARDS);
@@ -94,14 +101,16 @@ public class QuantityMeasurementApp {
         return result;
     }
 
+    public static Length demonstrateLengthAddition(Length length1, Length length2, Length.LengthUnit targetUnit) {
+        Length result = length1.add(length2, targetUnit);
+        System.out.println(length1 + " + " + length2 + " in " + targetUnit + " = " + result);
+        return result;
+    }
+
     public static void main(String[] args) {
-        demonstrateLengthEquality(new Length(1.0, Length.LengthUnit.FEET),
-                new Length(12.0, Length.LengthUnit.INCHES));
-        demonstrateLengthEquality(new Length(1.0, Length.LengthUnit.YARDS),
-                new Length(36.0, Length.LengthUnit.INCHES));
-        demonstrateLengthAddition(new Length(3.0, Length.LengthUnit.FEET),
-                new Length(12.0, Length.LengthUnit.INCHES));
-        demonstrateLengthAddition(new Length(2.0, Length.LengthUnit.YARDS),
-                new Length(1.0, Length.LengthUnit.FEET));
+        demonstrateLengthEquality(new Length(1.0, Length.LengthUnit.FEET), new Length(12.0, Length.LengthUnit.INCHES));
+        demonstrateLengthAddition(new Length(3.0, Length.LengthUnit.FEET), new Length(12.0, Length.LengthUnit.INCHES));
+        demonstrateLengthAddition(new Length(1.0, Length.LengthUnit.FEET), new Length(12.0, Length.LengthUnit.INCHES), Length.LengthUnit.FEET);
+        demonstrateLengthAddition(new Length(1.0, Length.LengthUnit.FEET), new Length(12.0, Length.LengthUnit.INCHES), Length.LengthUnit.INCHES);
     }
 }
