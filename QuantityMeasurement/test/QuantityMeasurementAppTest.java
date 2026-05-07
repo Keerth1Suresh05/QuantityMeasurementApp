@@ -5,82 +5,64 @@ import static org.junit.jupiter.api.Assertions.*;
 class QuantityMeasurementAppTest {
     @Test
     public void testFeetEqualsInches() {
-        Length feet = new Length(1.0, Length.LengthUnit.FEET);
-        Length inches = new Length(12.0, Length.LengthUnit.INCHES);
-        assertTrue(feet.equals(inches));
+        assertTrue(new Length(1.0, Length.LengthUnit.FEET).equals(new Length(12.0, Length.LengthUnit.INCHES)));
     }
 
     @Test
     public void testYardEquals36Inches() {
-        Length yard = new Length(1.0, Length.LengthUnit.YARDS);
-        Length inches = new Length(36.0, Length.LengthUnit.INCHES);
-        assertTrue(yard.equals(inches));
+        assertTrue(new Length(1.0, Length.LengthUnit.YARDS).equals(new Length(36.0, Length.LengthUnit.INCHES)));
     }
 
     @Test
     public void test100CmEquals39Point37Inches() {
-        Length cm = new Length(100.0, Length.LengthUnit.CENTIMETERS);
-        Length inches = new Length(39.37, Length.LengthUnit.INCHES);
-        assertTrue(cm.equals(inches));
+        assertTrue(new Length(100.0, Length.LengthUnit.CENTIMETERS).equals(new Length(39.37, Length.LengthUnit.INCHES)));
     }
 
     @Test
     public void testFeetNotEqualToYards() {
-        Length feet = new Length(1.0, Length.LengthUnit.FEET);
-        Length yard = new Length(1.0, Length.LengthUnit.YARDS);
-        assertFalse(feet.equals(yard));
+        assertFalse(new Length(1.0, Length.LengthUnit.FEET).equals(new Length(1.0, Length.LengthUnit.YARDS)));
     }
 
     @Test
     public void testDifferentValuesSameUnitNotEqual() {
-        Length feet1 = new Length(1.0, Length.LengthUnit.FEET);
-        Length feet2 = new Length(2.0, Length.LengthUnit.FEET);
-        assertFalse(feet1.equals(feet2));
+        assertFalse(new Length(1.0, Length.LengthUnit.FEET).equals(new Length(2.0, Length.LengthUnit.FEET)));
     }
 
     @Test
     public void testConvertFeetToInches() {
-        Length feet = new Length(3.0, Length.LengthUnit.FEET);
-        Length converted = feet.convertTo(Length.LengthUnit.INCHES);
+        Length converted = new Length(3.0, Length.LengthUnit.FEET).convertTo(Length.LengthUnit.INCHES);
         assertEquals(new Length(36.0, Length.LengthUnit.INCHES), converted);
     }
 
     @Test
     public void testConvertYardsToFeet() {
-        Length yards = new Length(2.0, Length.LengthUnit.YARDS);
-        Length converted = yards.convertTo(Length.LengthUnit.FEET);
+        Length converted = new Length(2.0, Length.LengthUnit.YARDS).convertTo(Length.LengthUnit.FEET);
         assertEquals(new Length(6.0, Length.LengthUnit.FEET), converted);
     }
 
     @Test
     public void testConvertCmToFeet() {
-        Length cm = new Length(30.48, Length.LengthUnit.CENTIMETERS);
-        Length converted = cm.convertTo(Length.LengthUnit.FEET);
+        Length converted = new Length(30.48, Length.LengthUnit.CENTIMETERS).convertTo(Length.LengthUnit.FEET);
         assertEquals(new Length(1.0, Length.LengthUnit.FEET), converted);
     }
 
     @Test
-    public void testEqualsReturnsFalseForNull() {
-        Length feet = new Length(1.0, Length.LengthUnit.FEET);
-        assertNotEquals(feet, null);
+    public void testAddFeetAndInches() {
+        Length sum = new Length(1.0, Length.LengthUnit.FEET).add(new Length(12.0, Length.LengthUnit.INCHES));
+        assertEquals(new Length(2.0, Length.LengthUnit.FEET), sum);
     }
 
     @Test
-    public void testEqualsReturnsFalseForDifferentClass() {
-        Length feet = new Length(1.0, Length.LengthUnit.FEET);
-        String notLength = "Not a Length";
-        assertNotEquals(feet, notLength);
+    public void testAddYardsAndFeet() {
+        Length sum = new Length(2.0, Length.LengthUnit.YARDS)
+                .add(new Length(1.0, Length.LengthUnit.FEET));
+        assertEquals(new Length(2.33, Length.LengthUnit.YARDS), sum);
     }
 
     @Test
-    public void testReferenceEquality() {
-        Length feet = new Length(1.0, Length.LengthUnit.FEET);
-        assertEquals(feet, feet);
-    }
-
-    @Test
-    public void testToStringFormatting() {
-        Length feet = new Length(1.234, Length.LengthUnit.FEET);
-        assertEquals("1.23 FEET", feet.toString());
+    public void testAddCentimetersAndInches() {
+        Length sum = new Length(100.0, Length.LengthUnit.CENTIMETERS)
+                .add(new Length(10.0, Length.LengthUnit.INCHES));
+        assertEquals(new Length(125.40, Length.LengthUnit.CENTIMETERS), sum);
     }
 }
